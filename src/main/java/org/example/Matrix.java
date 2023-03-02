@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Matrix {
     private double[][] data;
@@ -63,10 +62,19 @@ public class Matrix {
         }
     }
 
-    private void permuteRows(int row1, int row2){
-        double[] temp = data[row1];
-        data[row1] = data[row2];
-        data[row2] = temp;
+    public Matrix forSimpleIterations(){
+        for(int i = 0; i < data.length; i++){
+            for(int j = 0; j <= data.length; j++){
+                if(i != j){
+                    data[i][j] = (-1)*data[i][j]/data[i][i];
+                }
+                if(j == data.length){
+                    data[i][j] = data[i][j] * (-1);
+                }
+            }
+            data[i][i] = 0;
+        }
+        return new Matrix(data);
     }
 
     public static Matrix readFromConsole() throws IOException {
@@ -84,6 +92,7 @@ public class Matrix {
                 System.out.println("Size must be an integer");
             }
         }
+        System.out.println("Enter values");
         double[][] res = new double[size][size+1];
         for(int i = 0; i < size; i++){
             for(int j = 0; j <= size; j++){
@@ -98,7 +107,6 @@ public class Matrix {
                 }
             }
         }
-        reader.close();
         return new Matrix(res);
     }
 
@@ -135,7 +143,6 @@ public class Matrix {
             currRowNum++;
             currLine = reader.readLine();
         }
-        reader.close();
         return new Matrix(res);
     }
 
