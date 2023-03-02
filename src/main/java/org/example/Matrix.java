@@ -142,10 +142,13 @@ public class Matrix {
     public static Matrix generateRandomMatrix(){
         int size = (int)(Math.random()* (20) + 1);
         double[][] data = new double[size][size+1];
-        for(double[] row : data){
-            for(int i = 0; i <= size; i++){
-                row[i] = Math.random() * (10000 - (-10000)) + (-10000);
+        for(int i = 0; i < size; i++){
+            double sum = 0;
+            for(int j = 0; j <= size; j++){
+                data[i][j] = Math.random() * (10000 - (-10000)) + (-10000);
+                sum += Math.abs(data[i][j]);
             }
+            data[i][i] = sum;
         }
         return new Matrix(data);
     }
