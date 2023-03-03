@@ -8,6 +8,7 @@ public class SimpleIterationLab {
         String inputFrom = readInputType();
         if(inputFrom.equals("1")){
             Matrix matrix = Matrix.readFromConsole();
+            printMatrix(matrix);
             try {
                 SimpleIterationResult result = simpleIteration(matrix, readEpsilon());
                 printResult(result);
@@ -20,7 +21,9 @@ public class SimpleIterationLab {
         }
         if(inputFrom.equals("2")){
             try {
-                SimpleIterationResult result = simpleIteration(Matrix.readFromFile(readFileName()), readEpsilon());
+                Matrix matrix = Matrix.readFromFile(readFileName());
+                printMatrix(matrix);
+                SimpleIterationResult result = simpleIteration(matrix, readEpsilon());
                 printResult(result);
             } catch (DiagonalDominanceNotPossibleException e) {
                 System.out.println("Can not make this matrix diagonally dominant");
@@ -38,16 +41,7 @@ public class SimpleIterationLab {
             try {
                 Matrix matrix = Matrix.generateRandomMatrix();
                 System.out.println("Generated matrix");
-                for(int i = 0; i < matrix.getData().length; i++){
-                    for(int j = 0; j <= matrix.getData().length; j++){
-                        if(j == matrix.getData().length){
-                            System.out.print(" | " + matrix.getData()[i][j] + "\n");
-                        }
-                        else {
-                            System.out.print(matrix.getData()[i][j] + " ");
-                        }
-                    }
-                }
+                printMatrix(matrix);
                 SimpleIterationResult result = simpleIteration(matrix, readEpsilon());
                 printResult(result);
             } catch (DiagonalDominanceNotPossibleException e) {
@@ -100,7 +94,7 @@ public class SimpleIterationLab {
 
     private static void printResult(SimpleIterationResult result){
         for(int i = 0; i < result.res.length; i++){
-            System.out.println("x" + (i+1) + " = " + result.res[i]);
+            System.out.println("x" + (i+1) + " = " + result.res[i] + " Inaccuracy = " + result.inaccuracies[i]);
         }
         System.out.println("Number of iterations " + result.iterationsNum);
     }
@@ -109,9 +103,12 @@ public class SimpleIterationLab {
         public int iterationsNum;
         public double[] res;
 
-        public SimpleIterationResult(int iterationsNum, double[] res){
+        public double[] inaccuracies;
+
+        public SimpleIterationResult(int iterationsNum, double[] res, double[] inaccuracies){
             this.iterationsNum = iterationsNum;
             this.res = res;
+            this.inaccuracies = inaccuracies;
         }
     }
 
@@ -134,7 +131,11 @@ public class SimpleIterationLab {
             iterationsNum++;
         }
         while(!isAccurate(res, previous, epsilon));
-        return new SimpleIterationResult(iterationsNum, res);
+        double[] inaccuracies = new double[res.length];
+        for(int i = 0; i < inaccuracies.length; i++){
+            inaccuracies[i] = res[i] - previous[i];
+        }
+        return new SimpleIterationResult(iterationsNum, res, inaccuracies);
     }
 
     private static boolean isAccurate(double[] curr, double[] prev, double eps){
@@ -144,5 +145,18 @@ public class SimpleIterationLab {
             }
         }
         return true;
+    }
+
+    private static void printMatrix(Matrix matrix){
+        for(int i = 0; i < matrix.getData().length; i++){
+            for(int j = 0; j <= matrix.getData().length; j++){
+                if(j == matrix.getData().length){
+                    System.out.print(" | " + matrix.getData()[i][j] + "\n");
+                }
+                else {
+                    System.out.print(matrix.getData()[i][j] + " ");
+                }
+            }
+        }
     }
 }
