@@ -14,6 +14,8 @@ public class SimpleIterationLab {
             }
             catch (DiagonalDominanceNotPossibleException ex){
                 System.out.println("Can not make this matrix diagonally dominant");
+            } catch (ZeroDiagonalException ex){
+                System.out.println("System can not be solved");
             }
         }
         if(inputFrom.equals("2")){
@@ -27,6 +29,9 @@ public class SimpleIterationLab {
             }
             catch (FileNotFoundException ex){
                 System.out.println("File not found");
+            }
+            catch (ZeroDiagonalException ex){
+                System.out.println("System can not be solved");
             }
         }
         if(inputFrom.equals("3")){
@@ -47,6 +52,9 @@ public class SimpleIterationLab {
                 printResult(result);
             } catch (DiagonalDominanceNotPossibleException e) {
                 System.out.println("Can not make this matrix diagonally dominant");
+            }
+            catch (ZeroDiagonalException ex){
+                System.out.println("System can not be solved");
             }
         }
     }
@@ -107,7 +115,7 @@ public class SimpleIterationLab {
         }
     }
 
-    public static SimpleIterationResult simpleIteration(Matrix matrix, double epsilon) throws DiagonalDominanceNotPossibleException {
+    public static SimpleIterationResult simpleIteration(Matrix matrix, double epsilon) throws DiagonalDominanceNotPossibleException, ZeroDiagonalException {
         if(!matrix.isDiagonallyDominant()){
             matrix.toDiagonalDominance();
         }

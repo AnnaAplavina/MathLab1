@@ -62,9 +62,12 @@ public class Matrix {
         }
     }
 
-    public Matrix forSimpleIterations(){
+    public Matrix forSimpleIterations() throws ZeroDiagonalException{
         for(int i = 0; i < data.length; i++){
             for(int j = 0; j <= data.length; j++){
+                if(data[i][j] == 0){
+                    throw new ZeroDiagonalException();
+                }
                 if(i != j){
                     data[i][j] = (-1)*data[i][j]/data[i][i];
                 }
